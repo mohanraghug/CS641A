@@ -292,7 +292,6 @@ int main()
         cout << setw(8) << setfill('0') << hex << L.to_ullong() << ' ' << setw(8) << setfill('0') << R.to_ullong() << endl;
     }
     auto O = join(R, L);
-    apply_ip(O);
     auto [LL, RR] = get_LR(apply_ip(O, true));
 
     cout << setw(8) << setfill('0') << hex << LL.to_ullong() << ' ' << setw(8) << setfill('0') << RR.to_ullong() << endl;
