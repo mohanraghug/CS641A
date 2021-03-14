@@ -39,6 +39,27 @@ b64 apply_ip(b64 in, bool inv = false)
     return out;
 }
 
+pair<b32, b32> get_LR(b64 in)
+{
+    b32 L, R;
+    for (int i = 63, j = 31; i >= 32; i--, j--)
+    {
+        L[j] = in[i];
+        R[j] = in[i - 32];
+    }
+    return make_pair(L, R);
+}
+b64 join(b32 L, b32 R)
+{
+    b64 out;
+    for (int i = 31; i >= 0; i--)
+    {
+        out[i + 32] = L[i];
+        out[i] = R[i];
+    }
+    return out;
+}
+
 int main()
 {
 
@@ -58,8 +79,9 @@ int main()
             bits = (bits << 4) | b64(num);
         }
         b64 actual = apply_ip(bits);
+        auto [R, L] = get_LR(actual);
 
-        fout << bitset<64>(actual) << endl;
+        fout << L << R << endl;
     }
 
     return 0;

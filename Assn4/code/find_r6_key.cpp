@@ -215,7 +215,7 @@ int main()
     for (int _ = 0; _ < N; _++)
     {
         bitset<32> out1L, out1R, out2L, out2R;
-        fin >> out1R >> out1L >> out2R >> out2L;
+        fin >> out1L >> out1R >> out2L >> out2R;
 
         // outputs after expansion in the last round
         bitset<48> out1E = apply_E(out1L);
@@ -267,19 +267,27 @@ int main()
     {
         int cur_mx = 0;
         bitset<6> ans;
+        vector<int> cnts;
         for (auto [bs, cnt] : maybe[i])
         {
+            cnts.push_back(cnt);
             if (cnt > cur_mx)
             {
                 cur_mx = cnt;
                 ans = bs;
             }
         }
+
+        sort(cnts.begin(), cnts.end());
+        reverse(cnts.begin(), cnts.end());
+
         key = (key << 6);
         for (int j = 0; j < 6; j++)
         {
             key[j] = ans[j];
         }
+
+        cout << i + 1 << ' ' << ans << ' ' << cnts[0] << ' ' << cnts[1] << endl;
     }
 
     cout << key << endl;

@@ -340,8 +340,8 @@ int main()
 
     calc_Inv_P();
 
-    b64 in = 0;
-    b64 out = get("ogjnqhjfggqoqtro");
+    b64 in = get("pjjjstpmigntlltf");
+    b64 out = get("snmfqkhtsjoinofl");
 
     for (int i = 0; i < (1 << cnt); i++)
     {

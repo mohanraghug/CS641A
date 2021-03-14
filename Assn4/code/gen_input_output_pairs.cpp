@@ -32,6 +32,8 @@ void getinputs()
         int to = IP[i];
         rdiff |= (cur << (64 - to));
     }
+    
+    cout << hex << setw(16) << setfill('0') << rdiff << endl;
 
     int L = 1e5;
     for (int i = 0; i < L; i++)
