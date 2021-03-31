@@ -168,6 +168,16 @@ int main()
         }
     }
 
+    for (int i = 0; i < 8; i++)
+    {
+        cout << "For $$i=" << i + 1 << "$$: ";
+        for (auto [a, e] : adj[i])
+        {
+            cout << "(" << a << "," << e << ") ";
+        }
+        cout << endl;
+    }
+
     vector<int> E(8);
     vector<vector<int>> A(8, vector<int>(8));
 
@@ -289,5 +299,18 @@ int main()
     }
     cout << endl;
 
-    return 0;
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            if(j!=7) cout << A[i][j] << " & ";
+	    else cout << A[i][j] << " \\\\" << endl;
+        }
+    }
+
+    for (int i = 0; i < 8;i++){
+        cout << E[i] << " \n"[i == 7];
+    }
+
+        return 0;
 }

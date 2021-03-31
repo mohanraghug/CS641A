@@ -12,3 +12,8 @@ Assn5/src/analyse_A
 Assn5/src/analyse_encoding
 Assn5/src/solver
 .gitignore
+Assn5/code/analyse_A
+Assn5/code/analyse_encoding
+Assn5/code/solver
+Assn5/code/test_inputs.txt
+Assn5/code/test_outputs.txt
