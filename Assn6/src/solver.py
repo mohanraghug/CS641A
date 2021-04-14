@@ -45,7 +45,7 @@ L = 72
 K = (1 << L)
 padding <<= L
 
-f = add(power([padding, 1], 5), [N - C])
+f = add(power([padding, 1], e), [N - C])
 f = [x % N for x in f]
 for i in range(len(f)):
     f[i] = K**i * f[i]
