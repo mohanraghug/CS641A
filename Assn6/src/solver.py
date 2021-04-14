@@ -5,6 +5,9 @@ N = 8436444373572503486440255453382627917470389343976334334386326034275667860921
 C = 23701787746829110396789094907319830305538180376427283226295906585301889543996533410539381779684366880970896279018807100530176651625086988655210858554133345906272561027798171440923147960165094891980452757852685707020289384698322665347609905744582248157246932007978339129630067022987966706955482598869800151693
 e = 5
 padding = 0x596f7520736565206120476f6c642d42756720696e206f6e6520636f726e65722e20497420697320746865206b657920746f206120747265617375726520666f756e64206279
+L = 72
+K = (1 << L)
+m = 1
 
 
 def value(p, x):
@@ -41,8 +44,6 @@ def power(poly, k):
     return res
 
 
-L = 72
-K = (1 << L)
 padding <<= L
 
 f = add(power([padding, 1], e), [N - C])
@@ -50,23 +51,20 @@ f = [x % N for x in f]
 for i in range(len(f)):
     f[i] = K**i * f[i]
 
-d = 5
-m = 3
-
 Basis = []
-for u in range(d):
+for u in range(e):
     for v in range(m + 1):
         g = mult([N ** (m - v)], power(f, v))
         foo = [0] * (u + 1)
         foo[-1] = K ** u
         g = mult(g, foo)
-        while len(g) < d * (m + 1):
+        while len(g) < e * (m + 1):
             g.append(0)
         Basis.append(g)
 
-A = IntegerMatrix(d*(m+1), d*(m+1))
-for i in range(d * (m + 1)):
-    for j in range(d * (m + 1)):
+A = IntegerMatrix(e*(m+1), e*(m+1))
+for i in range(e * (m + 1)):
+    for j in range(e * (m + 1)):
         A[i, j] = Basis[i][j]
 
 LLL.reduction(A)
@@ -79,7 +77,7 @@ for i in range(len(v)):
 lo = -K
 hi = K
 
-assert(value(v, lo) < 0 and value(v, hi) > 0)
+assert(value(v, lo)*value(v, hi) < 0)
 
 ITERS = 100
 
@@ -88,7 +86,7 @@ for _ in range(ITERS):
     mid_val = value(v, mid)
     if mid_val == 0:
         break
-    if mid_val > 0:
+    if mid_val*value(v, hi) > 0:
         hi = mid
     else:
         lo = mid
