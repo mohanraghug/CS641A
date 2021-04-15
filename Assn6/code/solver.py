@@ -1,17 +1,21 @@
 #!/usr/bin/python3
 from fpylll import *
+from math import sqrt
 
 N = 84364443735725034864402554533826279174703893439763343343863260342756678609216895093779263028809246505955647572176682669445270008816481771701417554768871285020442403001649254405058303439906229201909599348669565697534331652019516409514800265887388539283381053937433496994442146419682027649079704982600857517093
 C = 23701787746829110396789094907319830305538180376427283226295906585301889543996533410539381779684366880970896279018807100530176651625086988655210858554133345906272561027798171440923147960165094891980452757852685707020289384698322665347609905744582248157246932007978339129630067022987966706955482598869800151693
 e = 5
 padding = 0x596f7520736565206120476f6c642d42756720696e206f6e6520636f726e65722e20497420697320746865206b657920746f206120747265617375726520666f756e64206279
 L = 72
-K = int(N**0.1)
+K = 2**100
 m = 1
 
+assert(2**(4.5) * sqrt(10) * K**(4.5) * N**(0.5) < N/10)
 
-def value(p, x):
-    return sum([x**i*p[i] for i in range(len(p))])
+# Helper Functions to deal with polynomials
+
+def value(poly, x):
+    return sum([x**i*poly[i] for i in range(len(poly))])
 
 
 def add(poly1, poly2):
@@ -44,6 +48,7 @@ def power(poly, k):
     return res
 
 
+# constructing the basis and doing LLL reduction
 padding <<= L
 
 f = add(power([padding, 1], e), [N - C])
@@ -51,7 +56,8 @@ f = [x % N for x in f]
 for i in range(len(f)):
     f[i] = K**i * f[i]
 
-Basis = []
+A = IntegerMatrix(e*(m+1), e*(m+1))
+i = 0
 for u in range(e):
     for v in range(m + 1):
         g = mult([N ** (m - v)], power(f, v))
@@ -60,20 +66,20 @@ for u in range(e):
         g = mult(g, foo)
         while len(g) < e * (m + 1):
             g.append(0)
-        Basis.append(g)
+        for j in range(e*(m+1)):
+            A[i,j] = g[j]
+        i += 1
 
-A = IntegerMatrix(e*(m+1), e*(m+1))
-for i in range(e * (m + 1)):
-    for j in range(e * (m + 1)):
-        A[i, j] = Basis[i][j]
 
 LLL.reduction(A)
 
+# shortest vector given by LLL
 v = [0]*len(A[0])
 for i in range(len(v)):
     v[i] = A[0][i] // (K**i)
 
 
+# using binary search to find the root
 lo = -(1 << L)
 hi = (1 << L)
 
