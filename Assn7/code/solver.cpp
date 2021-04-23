@@ -183,6 +183,7 @@ int main()
         }
     }
 
+    cout << "The password is ";
     for (int i = 0; i < pass.size(); i += 8)
     {
         int cur = 0;
@@ -190,8 +191,10 @@ int main()
         {
             cur = (cur << 1) + (pass[j] - '0');
         }
-        cout << char(cur);
+        if (cur)
+            cout << char(cur);
     }
+    cout << endl;
 
     return 0;
 }
